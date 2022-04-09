@@ -1,0 +1,331 @@
+---
+title: "Deploy Django Application with SQLite, Gunicorn and Nginx in Ubuntu 20.04"
+date: "2021-06-21"
+thumbnail: "./deploy django app with nginx and sqlite.jpg"
+slug: "deploy-django-application-with-sqlite-gunicorn-and-nginx-in-ubuntu-20-04"
+description: "In this article, we will see how to deploy or host a Django application in production with the help of the SQLite database, Gunicorn and Nginx."
+tags: ["Django", "Deployment"]
+---
+
+In this article, we will see how to deploy or host a Django application in production with the help of the SQLite database, Gunicorn and Nginx. We will go through all the steps from beginning to the very end we will see how we can serve our static and media files efficiently, you can browse through the contents of the article from the table of contents below.
+
+Django is an extremely powerful and scalable framework and it comes with a built-in development server (which you have been using while developing your app). But as the name suggests, it is meant for development purposes only and it is highly inefficient in serving the app to many users at a time in production.
+
+To serve our app in production we will use Gunicorn and Nginx as reverse-proxy and for serving our static files. We are using these production-grade tools to make our app reliable, available for all at a time and scalable.
+
+First of all, you need to set up your Ubuntu 20.04 server with a non-root user, you can follow the initial server setup guide [here](https://orbitgadget.com/blog/initial-server-setup-guide-for-deploying-apps).
+
+Once you are done with the initial set-up of your server you can log in with your non-root user in a new terminal/Powerbash session and follow the steps below.
+
+## Step 1: Update your server
+After logging in with your non-root user, you should first update your server with important security updates and then perform a reboot to apply those updates. You can do so by following the commands below.
+
+```bash
+sudo apt update
+```
+
+It basically updates the dependencies and sources from which the latest packages and applications can be downloaded.
+
+```bash
+sudo apt upgrade
+```
+
+The above command upgrades all the packages that are currently installed in your server from the sources configured via sources.
+
+```bash
+sudo apt dist-upgrade
+```
+
+It intelligently installs and removes packages as required based on the importance of the packages.
+
+```bash
+sudo reboot
+```
+
+Finally, to apply all the major updates in Linux, you need to perform a restart. After restart, you need to connect again to the server via SSH.
+
+## Step 2: Install Python3 and Nginx
+Now, we will begin with our main motive of hosting our Django application and begin with the installation of Python3, pip and Nginx.
+
+```bash
+sudo apt install python3-pip python3-dev nginx
+```
+
+## Step 3: Set Up the Virtual Environment
+To make our installation and app reliable and easy to migrate, we will install the virtual environment packages using the command below.
+
+```bash
+sudo pip3 install virtualenv
+```
+
+Now, we will make a directory inside which we will be keeping all the files related to our Django application. You can change the name of the directory below (replace `appdir` with any name you like).
+
+```bash
+mkdir ~/appdir
+cd ~/appdir
+```
+
+Create a virtual environment `env` for your application inside which we will be installing required dependencies and packages for our project. You can change the name `env` to anything you like.
+
+```bash
+virtualenv env
+```
+
+Let us activate the virtual environment using the command below.
+
+```bash
+source env/bin/activate
+```
+
+## Step 4: Install Django and Gunicorn
+We are inside the virtual environment now and we will proceed with the installation of the required packages for our Django project or application. We will install Django and Gunicorn first of all and then we will be fetching our required packages from the `requirements.txt` file (of your existing local project).
+
+```bash
+pip install django gunicorn
+```
+
+Next, we will create a new Django application named `myapp`, if you have you have your Django application made, you can simply move your files to the directory such that the file `manage.py` is in the outermost location of our directory using an SFTP connection (you can use FileZilla) and skip to step 6.
+
+## Step 5: Create a new Django application
+We will now create a new Django application inside our directory keeping the `manage.py` is in the outermost location. if you have your project with you bring it inside this directory.
+
+```bash
+django-admin startproject myapp ~/appdir
+```
+
+We will now modify our `settings.py` file to add our server's public IP to `ALLOWED_HOSTS`.
+
+```bash
+nano myapp/settings.py
+```
+
+Use arrow keys on the keyboard to navigate down and add the server's public IP address to the `ALLOWED_HOSTS`, make sure you include `localhost` since we will be proxying connections through a local Nginx instance.
+
+```PYTHON
+ALLOWED_HOSTS = ['your_server_IP', 'orbitgadget.com', 'localhost']
+```
+
+Also, add the STATIC_ROOT in the settings.py file, it is the location where we will collect all our static files later to be served live.
+
+```PYTHON
+. . .
+
+STATIC_URL = '/static/'
+import os
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+```
+
+## Step 6: Apply Migrations
+Migrations are basically an instruction to the database to create the required tables and fields for the functioning of our Django application. To make and apply migrations we will the following two commands.
+
+```bash
+~/appdir/manage.py makemigrations
+~/appdir/manage.py migrate
+```
+
+If the above two commands fail to work or you encounter any error you can use the following two commands.
+
+```bash
+python3 manage.py makemigrations
+python3 manage.py migrate
+```
+
+After migrating all your changes, we will create a superuser for our Django admin, if you have imported your existing Django project/app there is a high chance that you would have created a superuser already, if not then follow the command below to create one.
+
+```bash
+python3 manage.py createsuperuser
+```
+
+Provide a strong password on prompt and then optionally fill the rest of the fields or you can skip those by pressing `enter`.
+
+## Step 7: Testing the Setup
+We are done with a part of the setup, now we can test the working of the app by running the development server on the `8000` port. For this, we need to allow the `8000` port in the firewall using the following command.
+
+```bash
+sudo ufw allow 8000
+```
+
+Now, run the development server.
+
+```bash
+python3 manage.py runserver 0.0.0.0:8000
+```
+
+Visit the address `server's IP:8000` to check if your project is up and running, you should see your app's homepage or the default page (if you are starting with a new app here).
+
+![Default Django Site](/django%20app.png "Default Django Site")
+
+Press `Ctrl + C` to stop the development server.
+
+## Step 8: Testing and Setting Up Gunicorn
+We have installed Gunicorn for hosting our application and before proceeding further we will test the working of it by running our app on the same `8000` port but using Gunicorn this time.
+
+```bash
+gunicorn --bind 0.0.0.0:8000 myapp.wsgi
+```
+
+Your site should be running on the same `server's IP:8000` address. Press `Ctrl + C` to stop Gunicorn. We will now configure Gunicorn properly using the `.socket` and `.service files`. Back to our virtual environment, we will deactivate our virtual environment now.
+
+```bash
+deactivate
+```
+
+Next, we will create a new file gunicorn.socket file using the Vim editor.
+
+```markdown
+sudo vim /etc/systemd/system/gunicorn.socket
+```
+
+Press `i` to enable `INSERT` mode in Vim and then paste the following content inside the file followed by :wq to save the file and exit out of editing mode.
+
+```bash
+[Unit]
+Description=gunicorn socket
+
+[Socket]
+ListenStream=/run/gunicorn.sock
+
+[Install]
+WantedBy=sockets.target
+```
+
+Create a new file `gunicorn.service` similarly.
+
+```bash
+sudo vim /etc/systemd/system/gunicorn.service
+```
+
+Paste the following content inside the file after pressing `i` and the press `:wq` to save and exit. Make sure you replace `ajay` with your username, `myapp` with your app's name, `appdir` with your app's directory and `env` with your virtual environment's name in the following code.
+
+```bash
+[Unit]
+Description=gunicorn daemon
+Requires=gunicorn.socket
+After=network.target
+
+[Service]
+User=ajay
+Group=www-data
+WorkingDirectory=/home/ajay/appdir
+ExecStart=/home/ajay/appdir/env/bin/gunicorn \
+          --access-logfile - \
+          --workers 3 \
+          --bind unix:/run/gunicorn.sock \
+          myapp.wsgi:application
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Now, we have our `.socket` and `.service` files ready, we will now enable Gunicorn.
+
+```bash
+sudo systemctl start gunicorn.socket
+sudo systemctl enable gunicorn.socket
+```
+
+## Step 9: Configuring Nginx
+We have successfully set up Gunicorn and finally, we have to set up Nginx as a reverse proxy. We will create a configuration file for Nginx using the command below. Replace `myapp` with your app's name.
+
+```bash
+sudo vim /etc/nginx/sites-available/myapp
+```
+
+Paste the following content inside the new file created after pressing `i` and the press `:wq` to save and exit. Make sure you replace `orbitgadget.com` with your server's public IP or domain name, `ajay` with your username and `appdir` with your app's directory.
+
+```bash
+server {
+    listen 80;
+    server_name orbitgadget.com;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location /static/ {
+        root /home/ajay/appdir;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/run/gunicorn.sock;
+    }
+}
+```
+
+Now, activate the configuration using the following command.
+
+```bash
+sudo ln -s /etc/nginx/sites-available/myapp /etc/nginx/sites-enabled/
+```
+
+Next, you can remove the `default` file from the `sites-enabled` directory using the following command.
+
+```bash
+cd /etc/nginx/sites-enabled/
+sudo rm default
+```
+
+Test your Nginx configuration for syntactical errors by:
+
+```bash
+sudo nginx -t
+```
+
+If you pass the test and get no errors, you can proceed with restarting your Nginx web server.
+
+```bash
+sudo systemctl restart nginx
+```
+
+Finally, we will open our firewall to normal traffic on `port 80`. We will no longer use the `8000 port` on our server, so we will remove the rule from the firewall to open `port 8000`.
+
+```bash
+sudo ufw delete allow 8000
+sudo ufw allow 'Nginx Full'
+```
+
+You should now be able to view your Django application on your server’s domain or IP address.
+
+## Step 10: Fixing Errors
+Now, if you go to your server's public IP on your browser and try to access Django admin on `server_ip/admin` and see an error like "Site matching query does not exist." then return to the terminal and run the following command to get the `SITE_ID`.
+
+```bash
+python3 manage.py bash
+```
+```bash
+from django.contrib.sites.models import Site
+```
+
+Enter your server's public IP o your domain name in place of orbitgadget.com and then name your domain with a name you like.
+
+```bash
+new_site = Site.objects.create(domain='server IP or domain.com', name='domain or IP')
+```
+
+```bash
+print (new_site.id)
+```
+
+The above command will return a number that you should note and put into your `settings.py` file using the command below.
+
+```bash
+sudo nano myapp/settings.py
+```
+
+Put the obtained number from the bash as shown below in your `settings.py` file. I got `2`, you must replace it with the number you got.
+
+```PYTHON
+INSTALLED APPS = [
+    ...
+]
+
+SITE_ID = 2
+```
+
+Finally, you might have noticed that you are not able to view any of your static files, images or CSS. Run the following command to collect all your static files for serving.
+
+```bash
+python3 manage.py collectstatic
+```
+
+Your Django application should work fine now, you can now set up source control through Git and GitHub for your project using [this](https://orbitgadget.com/blog/must-know-git-commands-and-their-uses) guide and when you are ready, you can share a link to your application in the comments down below.

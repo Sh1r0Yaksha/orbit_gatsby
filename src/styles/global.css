@@ -1,0 +1,290 @@
+/* google fonts */
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Lato:ital,wght@0,400;0,700;1,400&family=Signika+Negative:wght@600&family=Space+Grotesk:wght@400;500;600;700&display=swap");
+/* bootstarp icosn */
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css");
+/* tailwindcss */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* general css */
+body {
+    box-sizing: border-box;
+    /* width: 100%;
+    overflow-x: hidden; */
+    background-color: #1e293b;
+    color: white;
+}
+/* anchor autolink headers */
+.anchor svg {
+    fill: #facc15;
+    height: 22px;
+    width: 22px;
+}
+.anchor.after {
+    vertical-align: middle;
+    padding-left: 6px;
+}
+a.anchor {
+    border: none !important;
+}
+/* fill available cover image on single blog post */
+.gatsby-image-wrapper.gatsby-image-wrapper-constrained.mb-3 div {
+    max-width: none !important;
+}
+.gatsby-image-wrapper.gatsby-image-wrapper-constrained.mb-3 {
+    width: -webkit-fill-available;
+    width: -moz-available;
+}
+/* single blog page CSS */
+.orb-page,
+.orb-blog-content {
+    color: #fff;
+}
+/* headings */
+.orb-page h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.orb-blog-content h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Space Grotesk", sans-serif;
+    /* font-weight: 600; */
+    @apply font-semibold;
+    line-height: 1.4em;
+    margin-bottom: 0.4rem;
+}
+.orb-page h2,
+.orb-blog-content h2 {
+    font-size: 24px;
+}
+.orb-page h3,
+.orb-blog-content h3 {
+    font-size: 20px;
+}
+/* end of headings */
+/* paragraph */
+.orb-page p,
+.orb-blog-content p {
+    margin-bottom: 1rem;
+    line-height: 1.6em;
+    font-family: "Lato", sans-serif;
+}
+/* end of paragraph */
+/* code and pre */
+.orb-page pre,
+.orb-blog-content pre {
+    margin-bottom: 1rem !important;
+}
+:not(pre) > code[class*="language-"] {
+    background-color: #111827 !important;
+    color: #38bdf8;
+}
+/* end of code and pre */
+/* links */
+.orb-page a,
+.orb-blog-content a {
+    color: #facc15;
+    font-weight: 500;
+    border-bottom: solid 1px #9ca3af;
+}
+/* end of links */
+/* lists */
+.orb-page ul,
+ol {
+    list-style: outside none none;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 1rem;
+}
+.orb-blog-content ul,
+ol {
+    list-style: outside none none;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 1rem;
+}
+.orb-page ul li,
+ol li {
+    padding: 7px 0 0 20px;
+    margin: 0 0 0 5px;
+    position: relative;
+    word-wrap: break-word;
+    counter-increment: steps;
+}
+.orb-blog-content ul li,
+ol li {
+    padding: 7px 0 0 20px;
+    margin: 0 0 0 5px;
+    position: relative;
+    word-wrap: break-word;
+    counter-increment: steps;
+}
+.orb-page ol li,
+.orb-blog-content ol li {
+    padding: 7px 0 0 30px;
+}
+.orb-page li ul,
+li ol {
+    margin-bottom: 0px;
+    padding-bottom: 0;
+}
+.orb-blog-content li ul,
+li ol {
+    margin-bottom: 0px;
+    padding-bottom: 0;
+}
+.orb-page ul li:before,
+.orb-blog-content ul li:before {
+    content: "\f105";
+    color: #facc15;
+    font-weight: 900;
+    font-family: "Font Awesome 5 Free";
+    padding-right: 10px;
+    display: block;
+    position: absolute;
+    left: 0;
+}
+.orb-page ol li:before,
+.orb-blog-content ol li:before {
+    content: counter(steps);
+    place-items: center;
+    background: #38bdf8;
+    color: #000;
+    font-weight: 500;
+    width: 1.5em;
+    height: 1.5em;
+    border-radius: 50%;
+    display: inline-grid;
+    position: absolute;
+    left: 0;
+}
+/* end of lists */
+/* media queries */
+@media (max-width: 921px) {
+    .orb-page ul li,
+    .orb-blog-content ul li {
+        margin: 0 0 0 2px;
+    }
+}
+@media (max-width: 767.98px) {
+    .orb-page h2,
+    .orb-blog-content h2 {
+        font-size: 20px;
+    }
+    .orb-page h3,
+    .orb-blog-content h3 {
+        font-size: 18px;
+    }
+    .fullWidth {
+        width: 100%;
+    }
+}
+/* end of media queries */
+/* scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 3px;
+}
+::-webkit-scrollbar-thumb {
+    background: #64748b;
+    border-radius: 16px;
+    box-shadow: inset 2px 2px 2px hsl(0deg 0% 100% / 25%),
+        inset -2px -2px 2px rgb(0 0 0 / 25%);
+}
+::-webkit-scrollbar-track {
+    background-color: #334155;
+}
+/* Hide scrollbar for Chrome, Safari and Opera */
+.fullWidth::-webkit-scrollbar {
+    display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.fullWidth {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+/* prism */
+.gatsby-highlight {
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+}
+.gatsby-highlight pre[class*="language-"] {
+    -webkit-overflow-scrolling: touch;
+    background: #111827;
+}
+.gatsby-highlight code[class*="language-"] {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 90%;
+}
+.gatsby-highlight pre[class*="language-"]::before {
+    border-radius: 0 0 0.25rem 0.25rem;
+    color: #fff;
+    font-size: 12px;
+    letter-spacing: 0.025rem;
+    padding: 0.1rem 0.5rem;
+    position: absolute;
+    right: 1rem;
+    text-align: right;
+    text-transform: uppercase;
+    top: 0;
+}
+.gatsby-highlight pre[class="language-bash"]::before {
+    content: "shell";
+    background: #65a30d;
+    color: white;
+}
+.gatsby-highlight pre[class="language-css"]::before {
+    content: "css";
+    background: #fca5a5;
+    color: black;
+}
+.gatsby-highlight pre[class="language-html"]::before {
+    content: "html";
+    background: #fde68a;
+    color: black;
+}
+.gatsby-highlight pre[class="language-javascript"]::before {
+    content: "js";
+    background: #f7df1e;
+    color: black;
+}
+.gatsby-highlight pre[class="language-python"]::before {
+    content: "python";
+    background: #0369a1;
+    color: white;
+}
+.gatsby-highlight pre[class="language-jsx"]::before {
+    content: "jsx";
+    background: #e2ad00;
+    color: black;
+}
+.gatsby-highlight pre[class="language-markdown"]::before {
+    content: "md";
+    background: #5b4ba3;
+    color: white;
+}
+.gatsby-highlight pre[class="language-mdx"]::before {
+    content: "mdx";
+    background: #dc2626;
+    color: white;
+}
+.gatsby-highlight pre[class="language-cpp"]::before {
+    content: "c++";
+    background: #38bdf8;
+    color: black;
+}
+.gatsby-highlight pre[class="language-c"]::before {
+    content: "c";
+    background: #86efac;
+    color: black;
+}
+a.custom-class.before svg {
+    fill: #f7df1e;
+}
+/* end of prism */

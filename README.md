@@ -1,3 +1,41 @@
+Todo
+1. all category page --------------------------------------done
+3. single category pages-----------------------------------done
+7. link from each post to single category page-------------done
+2. breadcrumbs---------------------------------------------done
+5. read time-----------------------------------------------done
+15. pagination in blog, tags, single tag, search-----------no need
+6. post nav under each post--------------------------------done
+- autolink headers-----------------------------------------done
+18. limit the number of tags and blogs in home-------------done
+8. other posts in sidebar for each posts-------------------done
+- prism syntax highlight ----------------------------------done
+- scrollbar -----------------------------------------------done
+- trailing slash ------------------------------------------done
+14. styling -----------------------------------------------done
+11. seo----------------------------------------------------done
+- import tailwind in gatsby browser------------------------done
+9. atom/rss feed ------------------------------------------done
+10. sitemap------------------------------------------------done
+- good navbar----------------------------------------------done
+- links----------------------------------------------------done
+4. pages -about, project, contact -------------------------done
+12. contribute page----------------------------------------done
+- robots.txt and ads.txt-----------------------------------done
+- deploy
+17. adsense
+- portfolio
+16. search 
+13. contact page and post comments
+
+
+
+
+
+
+
+
+
 <p align="center">
   <a href="https://www.gatsbyjs.com/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter">
     <img alt="Gatsby" src="https://www.gatsbyjs.com/Gatsby-Monogram.svg" width="60" />
