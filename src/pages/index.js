@@ -9,8 +9,8 @@ import { Helmet } from "react-helmet";
 
 const IndexPage = () => {
     return (
-        <Layout pageTitle="A Tech Site for Geeks">
-            <Seo title="A Tech Site for Geeks" />
+        <Layout pageTitle="Chrysallis">
+            <Seo title="Chrysallis" />
             <Helmet>
                 <script type="application/ld+json">
                     {`
