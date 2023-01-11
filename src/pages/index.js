@@ -10,7 +10,7 @@ import { Helmet } from "react-helmet";
 const IndexPage = () => {
     return (
         <Layout pageTitle="Chrysallis">
-            <Seo title="Chrysallis" />
+            <Seo title="Chrysallis  " />
             <Helmet>
                 <script type="application/ld+json">
                     {`
