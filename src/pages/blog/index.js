@@ -16,10 +16,7 @@ const BlogPage = ({ data }) => {
                         The Tech Blog
                     </h1>
                     <p className="md:mb-6 font-medium leading-6 text-gray-200 lg:max-w-3xl mx-auto">
-                        A tech and study-oriented blog for geeks. We love being
-                        surrounded by gadgets, algorithms, codes and ideas.We
-                        cover tech, tutorials, guides, tech hacks and tips &
-                        tricks in this blog.
+                        lorem ipsum
                     </p>
                     <div className="flex justify-center">
                         <Link to="/">
